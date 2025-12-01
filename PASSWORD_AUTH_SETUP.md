@@ -12,16 +12,27 @@
 
 ## Important: Email Confirmation Setting
 
-### For Testing (Recommended while developing)
-- **Turn OFF** "Confirm email"
-- Users can sign up and log in immediately without email verification
-- Faster for testing with your wife
+**⚠️ CRITICAL: Turn OFF email confirmation for instant login!**
 
-### For Production (More secure)
-- **Turn ON** "Confirm email"  
+1. Go to **Authentication** → **Providers** → **Email**
+2. Find **"Confirm email"** toggle
+3. **Turn it OFF** (disable it)
+4. Click **Save**
+
+### Why?
+- **OFF** = Users log in instantly after signup (recommended for your use case)
+- **ON** = Users must click email link before they can log in (causes the "stuck" issue)
+
+### For Testing (Recommended)
+- ✅ **Turn OFF** "Confirm email"
+- Users can sign up and log in immediately
+- No waiting for emails
+- Perfect for testing with your wife
+
+### For Production Later (Optional)
+- **Turn ON** "Confirm email" if you want email verification
 - Users receive confirmation email after signing up
 - Must click link before they can log in
-- More secure but adds extra step
 
 ## Update RLS Policies for Profiles
 

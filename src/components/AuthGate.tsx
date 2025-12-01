@@ -35,16 +35,22 @@ export function AuthGate({ children }: AuthGateProps) {
 
         if (error) throw error
         
-        if (data.user) {
-          // Create profile immediately
-          await supabase
-            .from('profiles')
-            .insert({
-              id: data.user.id,
-              full_name: fullName,
-            } as any)
-          
-          setMessage('Account created! Logging you in...')
+        if (data.user && data.session) {
+          // User is logged in, profile will be created by trigger or we'll create it
+          try {
+            await supabase
+              .from('profiles')
+              .insert({
+                id: data.user.id,
+                full_name: fullName,
+              } as any)
+          } catch (profileError) {
+            // Profile might already exist from trigger, that's okay
+            console.log('Profile creation note:', profileError)
+          }
+          // Don't show message, just let the user through
+        } else {
+          setMessage('Account created! Check your email to confirm your account.')
         }
       } else {
         // Sign in with email and password
@@ -54,7 +60,6 @@ export function AuthGate({ children }: AuthGateProps) {
         })
 
         if (error) throw error
-        setMessage('Welcome back!')
       }
     } catch (error: any) {
       setMessage(error.message || 'An error occurred. Please try again.')
