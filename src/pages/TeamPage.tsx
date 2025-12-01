@@ -42,9 +42,15 @@ export function TeamPage() {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-12 text-center border border-white/20">
           <h2 className="text-2xl font-bold text-white mb-4">No Team Yet</h2>
-          <p className="text-gray-300">
-            You haven't been added to a team yet. Ask your administrator to add you to a team.
+          <p className="text-gray-300 mb-6">
+            You haven't been added to a team yet. Create a team or wait to be invited.
           </p>
+          <a
+            href="/manage-team"
+            className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+          >
+            Create or Manage Team
+          </a>
         </div>
       </div>
     )

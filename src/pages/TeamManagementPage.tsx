@@ -70,13 +70,18 @@ export function TeamManagementPage() {
     setMessage('')
 
     try {
+      console.log('Creating team...', { teamName, eventName, eventDate, userId: user!.id })
       const newTeam = await createTeam(teamName, eventName, `${eventDate}T00:00:00Z`)
-      await addUserToTeam(newTeam.id, user!.id)
+      console.log('Team created:', newTeam)
       
-      setMessage('Team created successfully!')
+      await addUserToTeam(newTeam.id, user!.id)
+      console.log('User added to team')
+      
+      setMessage('Team created successfully! Loading...')
       setShowCreateForm(false)
       await loadTeamData()
     } catch (error: any) {
+      console.error('Error creating team:', error)
       setMessage(error.message || 'Error creating team')
     } finally {
       setSubmitting(false)
