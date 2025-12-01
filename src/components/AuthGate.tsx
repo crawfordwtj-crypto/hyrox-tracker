@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/useUserStore'
+import { ResetPasswordModal } from './ResetPasswordModal'
 
 interface AuthGateProps {
   children: React.ReactNode
@@ -14,6 +15,7 @@ export function AuthGate({ children }: AuthGateProps) {
   const [fullName, setFullName] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [message, setMessage] = useState('')
+  const [showResetModal, setShowResetModal] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -147,16 +149,25 @@ export function AuthGate({ children }: AuthGateProps) {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-2">
             <button
               onClick={() => {
                 setIsSignUp(!isSignUp)
                 setMessage('')
               }}
-              className="text-blue-300 hover:text-blue-200 text-sm transition-colors"
+              className="text-blue-300 hover:text-blue-200 text-sm transition-colors block w-full"
             >
               {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
             </button>
+            
+            {!isSignUp && (
+              <button
+                onClick={() => setShowResetModal(true)}
+                className="text-gray-400 hover:text-gray-300 text-sm transition-colors"
+              >
+                Forgot password?
+              </button>
+            )}
           </div>
 
           {message && (
@@ -169,6 +180,11 @@ export function AuthGate({ children }: AuthGateProps) {
             </div>
           )}
         </div>
+
+        <ResetPasswordModal 
+          isOpen={showResetModal} 
+          onClose={() => setShowResetModal(false)} 
+        />
       </div>
     )
   }
