@@ -37,19 +37,28 @@ export function ResetPasswordPage() {
     setError('')
 
     try {
-      const { error } = await supabase.auth.updateUser({
+      console.log('Attempting to update password...')
+      
+      const { data, error } = await supabase.auth.updateUser({
         password: newPassword
       })
+
+      console.log('Update response:', { data, error })
 
       if (error) throw error
 
       setMessage('Password updated successfully! Redirecting...')
+      
+      // Sign out and redirect to login
+      await supabase.auth.signOut()
+      
       setTimeout(() => {
         navigate('/')
-      }, 2000)
+        window.location.reload()
+      }, 1500)
     } catch (err: any) {
+      console.error('Password update error:', err)
       setError(err.message || 'Failed to update password')
-    } finally {
       setLoading(false)
     }
   }
