@@ -29,28 +29,33 @@ export function EventCountdown() {
   }, [])
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-      <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold">Event Countdown</h2>
-        <p className="text-blue-100 text-sm">March 27, 2026</p>
-      </div>
-      
-      <div className="grid grid-cols-4 gap-4 text-center">
-        <div className="bg-white/20 rounded-lg p-3 backdrop-blur">
-          <div className="text-3xl font-bold">{timeLeft.days}</div>
-          <div className="text-xs text-blue-100 mt-1">Days</div>
+    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-4 sm:p-6 text-white">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg sm:text-xl font-bold">Event Countdown</h2>
+          <p className="text-blue-100 text-xs sm:text-sm">March 27, 2026</p>
         </div>
-        <div className="bg-white/20 rounded-lg p-3 backdrop-blur">
-          <div className="text-3xl font-bold">{timeLeft.hours}</div>
-          <div className="text-xs text-blue-100 mt-1">Hours</div>
-        </div>
-        <div className="bg-white/20 rounded-lg p-3 backdrop-blur">
-          <div className="text-3xl font-bold">{timeLeft.minutes}</div>
-          <div className="text-xs text-blue-100 mt-1">Minutes</div>
-        </div>
-        <div className="bg-white/20 rounded-lg p-3 backdrop-blur">
-          <div className="text-3xl font-bold">{timeLeft.seconds}</div>
-          <div className="text-xs text-blue-100 mt-1">Seconds</div>
+        
+        <div className="flex items-center gap-1 sm:gap-2 text-right">
+          <div>
+            <div className="text-2xl sm:text-4xl font-bold leading-none">{timeLeft.days}</div>
+            <div className="text-[10px] sm:text-xs text-blue-100">days</div>
+          </div>
+          <div className="text-2xl sm:text-4xl font-bold">:</div>
+          <div>
+            <div className="text-2xl sm:text-4xl font-bold leading-none">{String(timeLeft.hours).padStart(2, '0')}</div>
+            <div className="text-[10px] sm:text-xs text-blue-100">hrs</div>
+          </div>
+          <div className="text-2xl sm:text-4xl font-bold">:</div>
+          <div>
+            <div className="text-2xl sm:text-4xl font-bold leading-none">{String(timeLeft.minutes).padStart(2, '0')}</div>
+            <div className="text-[10px] sm:text-xs text-blue-100">min</div>
+          </div>
+          <div className="text-2xl sm:text-4xl font-bold">:</div>
+          <div>
+            <div className="text-2xl sm:text-4xl font-bold leading-none">{String(timeLeft.seconds).padStart(2, '0')}</div>
+            <div className="text-[10px] sm:text-xs text-blue-100">sec</div>
+          </div>
         </div>
       </div>
     </div>
