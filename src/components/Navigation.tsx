@@ -47,6 +47,16 @@ export function Navigation() {
               >
                 Team
               </Link>
+              <Link
+                to="/manage-team"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/manage-team')
+                    ? 'bg-white/20 text-white'
+                    : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                Manage Team
+              </Link>
             </div>
           </div>
 

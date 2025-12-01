@@ -6,6 +6,7 @@ import { Navigation } from './components/Navigation'
 import { DashboardPage } from './pages/DashboardPage'
 import { LogTrainingPage } from './pages/LogTrainingPage'
 import { TeamPage } from './pages/TeamPage'
+import { TeamManagementPage } from './pages/TeamManagementPage'
 
 function App() {
   const initialize = useUserStore((state) => state.initialize)
@@ -24,6 +25,7 @@ function App() {
               <Route path="/" element={<DashboardPage />} />
               <Route path="/log" element={<LogTrainingPage />} />
               <Route path="/team" element={<TeamPage />} />
+              <Route path="/manage-team" element={<TeamManagementPage />} />
             </Routes>
           </main>
         </div>

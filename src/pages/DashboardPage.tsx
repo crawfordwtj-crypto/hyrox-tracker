@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUserStore } from '../store/useUserStore'
 import { getPersonalBests, PersonalBest, getUserTeamId, getTeamMembers } from '../lib/api'
 import { EventCountdown } from '../components/EventCountdown'
+import { InviteBanner } from '../components/InviteBanner'
 
 export function DashboardPage() {
   const { user, profile } = useUserStore()
@@ -67,6 +68,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      <InviteBanner />
       <EventCountdown />
 
       {/* Readiness Stats */}
