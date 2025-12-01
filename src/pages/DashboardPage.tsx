@@ -4,7 +4,7 @@ import { getPersonalBests, PersonalBest, getUserTeamId, getTeamMembers } from '.
 import { EventCountdown } from '../components/EventCountdown'
 
 export function DashboardPage() {
-  const { user } = useUserStore()
+  const { user, profile } = useUserStore()
   const [personalBests, setPersonalBests] = useState<PersonalBest[]>([])
   const [overallReadiness, setOverallReadiness] = useState(0)
   const [teamReadiness, setTeamReadiness] = useState<number | null>(null)
@@ -103,7 +103,9 @@ export function DashboardPage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-white mb-4">Your Progress</h2>
+        <h2 className="text-2xl font-bold text-white mb-4">
+          {profile?.full_name ? `${profile.full_name}'s Progress` : 'Your Progress'}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {personalBests.map((best) => {
             const readinessPercent = best.comp_amount > 0

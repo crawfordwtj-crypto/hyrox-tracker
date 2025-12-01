@@ -8,7 +8,10 @@ interface AuthGateProps {
 
 export function AuthGate({ children }: AuthGateProps) {
   const { user, loading } = useUserStore()
+  const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -18,17 +21,43 @@ export function AuthGate({ children }: AuthGateProps) {
     setMessage('')
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: window.location.origin,
-        },
-      })
+      if (isSignUp) {
+        // Sign up with email, password, and name
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+            },
+          },
+        })
 
-      if (error) throw error
-      setMessage('Check your email for the login link!')
-    } catch (error) {
-      setMessage('Error sending magic link. Please try again.')
+        if (error) throw error
+        
+        if (data.user) {
+          // Create profile immediately
+          await supabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              full_name: fullName,
+            } as any)
+          
+          setMessage('Account created! Logging you in...')
+        }
+      } else {
+        // Sign in with email and password
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+
+        if (error) throw error
+        setMessage('Welcome back!')
+      }
+    } catch (error: any) {
+      setMessage(error.message || 'An error occurred. Please try again.')
       console.error(error)
     } finally {
       setSubmitting(false)
@@ -53,6 +82,23 @@ export function AuthGate({ children }: AuthGateProps) {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {isSignUp && (
+              <div>
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-200 mb-2">
+                  Full Name
+                </label>
+                <input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your name"
+                  required
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
                 Email Address
@@ -68,18 +114,49 @@ export function AuthGate({ children }: AuthGateProps) {
               />
             </div>
 
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {isSignUp && (
+                <p className="mt-1 text-xs text-gray-400">Minimum 6 characters</p>
+              )}
+            </div>
+
             <button
               type="submit"
               disabled={submitting}
               className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg"
             >
-              {submitting ? 'Sending...' : 'Send Magic Link'}
+              {submitting ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
             </button>
           </form>
 
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => {
+                setIsSignUp(!isSignUp)
+                setMessage('')
+              }}
+              className="text-blue-300 hover:text-blue-200 text-sm transition-colors"
+            >
+              {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            </button>
+          </div>
+
           {message && (
             <div className={`mt-4 p-3 rounded-lg text-sm ${
-              message.includes('Error') 
+              message.includes('error') || message.includes('Error')
                 ? 'bg-red-500/20 text-red-200' 
                 : 'bg-green-500/20 text-green-200'
             }`}>
